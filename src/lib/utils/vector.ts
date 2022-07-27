@@ -36,5 +36,9 @@ export default {
 
 	toString(a: Vector) {
 		return `(${a[0]}, ${a[1]})`;
+	},
+
+	getAngle(a: Vector) {
+		return Math.atan2(a[1], a[0]);
 	}
 };

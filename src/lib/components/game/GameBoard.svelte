@@ -6,16 +6,23 @@
 	import v from '$lib/utils/vector';
 
 	import { marbles } from '$lib/stores/game/marbles';
+	import Rotator from './Rotator.svelte';
+
+	import { ui } from '$lib/stores/game/ui';
+	const { rotateAngle } = ui;
 </script>
 
-<div
-	class="gameboard w-[90vmin] h-[90vmin] border-[1vmin] border-gray-700 rounded-full shadow border-double relative"
->
-	{#each getAllLocations() as location (v.toString(location))}
-		<MarbleCell {location} />
-	{/each}
+<Rotator>
+	<div
+		class="gameboard w-[85vmin] h-[85vmin] rounded-full shadow relative bg-black cursor-default"
+		style:transform="rotate({$rotateAngle}rad)"
+	>
+		{#each getAllLocations() as location (v.toString(location))}
+			<MarbleCell {location} />
+		{/each}
 
-	{#each $marbles as marble (marble.id)}
-		<Marble {marble} />
-	{/each}
-</div>
+		{#each $marbles as marble (marble.id)}
+			<Marble {marble} />
+		{/each}
+	</div>
+</Rotator>

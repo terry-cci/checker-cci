@@ -9,7 +9,7 @@
 
 	export let location: Vector;
 
-	const CELL_SIZE_FACTOR = 1 / 2;
+	const CELL_SIZE_FACTOR = 3 / 5;
 	const size: Vector = [GAP * CELL_SIZE_FACTOR, GAP * CELL_SIZE_FACTOR];
 
 	const { selectedMarble, selectedCell, movableLocations } = marbles;
@@ -33,7 +33,8 @@
 
 <Positioner {location} {size}>
 	<div
-		class="gameboard__cell transition-all duration-500 h-full rounded-full border-gray-600"
+		class="relative z-20 gameboard__cell transition-all duration-500 h-full rounded-full border-gray-600"
+		style:cursor={movable ? 'pointer' : 'default'}
 		style:border-width={selected || movable ? '0.7vmin' : '0.4vmin'}
 		style:border-color={selected || movable ? '#999' : 'rgb(55 65 81)'}
 		style:background-color={selected ? '#85ff39' : 'rgb(17 24 39'}

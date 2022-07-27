@@ -5,13 +5,12 @@
 	import { GAP } from '$lib/utils/map';
 
 	import Positioner from './Positioner.svelte';
-	import { lightenHex } from '$lib/utils/color';
 	import { marbles } from '$lib/stores/game/marbles';
 	import BaseMarble from './BaseMarble.svelte';
 
 	export let marble: Marble;
 
-	const MARBLE_SIZE_FACTOR = 2 / 3;
+	const MARBLE_SIZE_FACTOR = 3 / 4;
 	const size: Vector = [GAP * MARBLE_SIZE_FACTOR, GAP * MARBLE_SIZE_FACTOR];
 
 	const { selectedMarble } = marbles;
