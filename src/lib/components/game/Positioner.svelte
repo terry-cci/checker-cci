@@ -13,7 +13,7 @@
 	style:height={size[1] + '%'}
 	style:left={renderLocation[0] + '%'}
 	style:bottom={renderLocation[1] + '%'}
-	class="absolute transition-all"
+	class="absolute transition-all duration-500"
 >
 	<slot />
 </div>

@@ -32,7 +32,7 @@
 
 <Positioner {location} {size}>
 	<div
-		class="gameboard__cell transition-all bg-gray-900 border-[0.4vmin] border-gray-800  h-full rounded-full {selected
+		class="gameboard__cell transition-all duration-500 bg-gray-900 border-[0.4vmin] border-gray-800  h-full rounded-full {selected
 			? selectedClasses
 			: ''}"
 		style:border-width={selected || hinted ? '0.7vmin' : '0.4vmin'}
