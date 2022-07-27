@@ -3,10 +3,12 @@ import type { Vector } from '$/utils/vector';
 export type Team = {
 	id: number;
 	color: string;
+	goal: number;
 };
 
-export type TeamWithCells = Team & {
+export type TeamData = Team & {
 	cells: Vector[];
+	victory: boolean;
 };
 
 export type Marble = {

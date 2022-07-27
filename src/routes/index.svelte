@@ -9,11 +9,13 @@
 
 	$: playerCount = clamp(playerCount, 6);
 
-	const { activeTeam, movedMarble } = gameflow;
+	const { activeTeam, movedMarble, teams } = gameflow;
 </script>
 
 <div class="h-full flex items-center justify-center relative">
-	<div class="absolute left-0 top-0 flex flex-col gap-y-2 bg-black shadow z-10 p-4 sidebar">
+	<div
+		class="absolute left-0 top-0 flex flex-col gap-y-2 bg-black shadow z-10 p-4 sidebar max-w-xs bottom-0"
+	>
 		<input
 			type="number"
 			placeholder="玩家人數"
@@ -38,6 +40,8 @@
 		<button on:click={() => gameflow.nextTeam()} disabled={!$movedMarble}> 完成走子 </button>
 
 		<button on:click={() => gameflow.undoMove()} disabled={!$movedMarble}> 取消走子 </button>
+
+		<!-- <pre class="overflow-auto">{JSON.stringify($teams, ['id', 'victory'], 2)}</pre> -->
 	</div>
 
 	<GameBoard />

@@ -22,18 +22,15 @@
 	function handleClick() {
 		if (!movable) return;
 
-		if (selected) {
-			if (!$selectedMarble) throw 'No marble is selected';
-			marbles.moveMarble($selectedMarble, movable);
-			return;
-		}
-		marbles.selectCell(location);
+		if (!$selectedMarble) throw 'No marble is selected';
+		marbles.moveMarble($selectedMarble, movable);
+		return;
 	}
 </script>
 
 <Positioner {location} {size}>
 	<div
-		class="relative z-20 gameboard__cell transition-all duration-500 h-full rounded-full border-gray-600"
+		class="relative z-20 gameboard__cell transition-all h-full rounded-full border-gray-600"
 		style:cursor={movable ? 'pointer' : 'default'}
 		style:border-width={selected || movable ? '0.7vmin' : '0.4vmin'}
 		style:border-color={selected || movable ? '#999' : 'rgb(55 65 81)'}

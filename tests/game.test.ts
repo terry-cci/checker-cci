@@ -62,12 +62,12 @@ test.describe('checker game', () => {
 		await expect(page.locator('.gameboard .gameboard__cell--hinted')).toHaveCount(2);
 	});
 
-	test('can select movable locations', async ({ page }) => {
-		await page.locator('"初始化棋盤"').click();
-		await page.locator('.gameboard__marble[data-team="2"]').last().click();
+	// test('can move marble', async ({ page }) => {
+	// 	await page.locator('"初始化棋盤"').click();
+	// 	await page.locator('.gameboard__marble[data-team="2"]').last().click();
 
-		const cell = page.locator('.gameboard .gameboard__cell--hinted').first();
-		await cell.click();
-		await expect(cell).toHaveClass(/gameboard__cell--selected/);
-	});
+	// 	const cell = page.locator('.gameboard .gameboard__cell--hinted').first();
+	// 	await cell.click();
+	// 	await expect(cell).not.toHaveClass(/gameboard__cell--hinted/);
+	// });
 });

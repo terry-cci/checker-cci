@@ -2,7 +2,7 @@ import v, { skew, type Vector } from './vector';
 import map from '$lib/data/map.json';
 
 import { marbles } from '$lib/stores/game/marbles';
-import type { Marble, MovableLocation, TeamWithCells } from '$lib/types/Marble';
+import type { Marble, MovableLocation, TeamData } from '$lib/types/Marble';
 import { get } from 'svelte/store';
 import { gameflow } from '$lib/stores/game/gameflow';
 
@@ -35,13 +35,14 @@ export const getAllLocations = () =>
 		return column;
 	});
 
-export const getMarblesOfTeam = (team: TeamWithCells) => {
+export const getMarblesOfTeam = (team: TeamData) => {
 	const teamMarbles = team.cells.map(([x, y], marbleIdx) => {
 		const marble: Marble = {
 			id: team.id * 100 + marbleIdx + 1,
 			team: {
 				id: team.id,
-				color: team.color
+				color: team.color,
+				goal: team.goal
 			},
 			location: [x, y]
 		};

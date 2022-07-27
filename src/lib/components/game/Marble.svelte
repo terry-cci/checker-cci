@@ -7,6 +7,7 @@
 	import Positioner from './Positioner.svelte';
 	import { marbles } from '$lib/stores/game/marbles';
 	import BaseMarble from './BaseMarble.svelte';
+	import { gameflow } from '$lib/stores/game/gameflow';
 
 	export let marble: Marble;
 
@@ -24,6 +25,6 @@
 		class="cursor-pointer hover:scale-110 transition-transform {selected ? selectedClasses : ''}"
 		{selected}
 		team={marble.team}
-		on:click={() => marbles.selectMarble(marble)}
+		on:click={() => (selected ? gameflow.nextTeam() : marbles.selectMarble(marble))}
 	/>
 </Positioner>

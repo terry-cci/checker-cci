@@ -17,7 +17,7 @@
 	style:left={renderLocation[0] + '%'}
 	style:bottom={renderLocation[1] + '%'}
 	style:transform="rotate({-$rotateAngle}rad)"
-	class="absolute duration-500"
+	class="absolute duration-150"
 	style="transition-property: left, bottom;"
 	data-x={location[0]}
 	data-y={location[1]}
