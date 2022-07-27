@@ -38,6 +38,7 @@
 
 <div
 	class="flex items-center justify-center w-[95vmin] h-[95vmin] bg-gray-900 rounded-full border-[1vmin] border-double border-gray-700 cursor-grab shadow origin-center"
+	style:background-image="radial-gradient(circle at center, black 60%, #1a1f26 100%)"
 	on:mousedown|self={(e) => startDrag([e.clientX, e.clientY])}
 	bind:this={rotatorDiv}
 >
