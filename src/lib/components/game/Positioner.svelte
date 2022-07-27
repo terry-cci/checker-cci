@@ -19,6 +19,8 @@
 	style:transform="rotate({-$rotateAngle}rad)"
 	class="absolute duration-500"
 	style="transition-property: left, bottom;"
+	data-x={location[0]}
+	data-y={location[1]}
 >
 	<slot />
 </div>

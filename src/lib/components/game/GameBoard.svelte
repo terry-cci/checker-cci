@@ -14,7 +14,7 @@
 
 <Rotator>
 	<div
-		class="gameboard w-[85vmin] h-[85vmin] rounded-full shadow relative  cursor-default"
+		class="gameboard w-[85vmin] h-[85vmin] rounded-full shadow relative cursor-default"
 		style:transform="rotate({$rotateAngle}rad)"
 	>
 		{#each getAllLocations() as location (v.toString(location))}

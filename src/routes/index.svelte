@@ -3,14 +3,17 @@
 	import GameBoard from '$lib/components/game/GameBoard.svelte';
 	import { gameflow } from '$lib/stores/game/gameflow';
 	import { marbles } from '$lib/stores/game/marbles';
+	import { clamp } from '$lib/utils/math';
 
 	let playerCount: number = 2;
+
+	$: playerCount = clamp(playerCount, 6);
 
 	const { activeTeam, movedMarble } = gameflow;
 </script>
 
 <div class="h-full flex items-center justify-center relative">
-	<div class="absolute left-0 top-0 flex flex-col gap-y-2 bg-black shadow z-10 p-4">
+	<div class="absolute left-0 top-0 flex flex-col gap-y-2 bg-black shadow z-10 p-4 sidebar">
 		<input
 			type="number"
 			placeholder="玩家人數"

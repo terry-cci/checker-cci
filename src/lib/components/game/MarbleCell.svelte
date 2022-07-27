@@ -37,8 +37,10 @@
 		style:cursor={movable ? 'pointer' : 'default'}
 		style:border-width={selected || movable ? '0.7vmin' : '0.4vmin'}
 		style:border-color={selected || movable ? '#999' : 'rgb(55 65 81)'}
-		style:background-color={selected ? '#85ff39' : 'rgb(17 24 39'}
+		style:background-color={selected ? '#ff00fc' : movable ? '#ccc' : '#090c12'}
 		style="border-style: inset;"
+		class:gameboard__cell--hinted={movable}
+		class:gameboard__cell--selected={selected}
 		on:click={() => handleClick()}
 	/>
 </Positioner>
