@@ -45,6 +45,7 @@ function createMarbles() {
 
 	function selectMarble(marble: Marble) {
 		selectedMarble.set(marble);
+		selectedCell.set(undefined);
 	}
 
 	function selectCell(location: Vector) {
