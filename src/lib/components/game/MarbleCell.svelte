@@ -17,8 +17,6 @@
 	$: selected = v.equals($selectedCell, location);
 	$: hinted = $movableLocations.find((movableLocation) => v.equals(movableLocation, location));
 
-	const selectedClasses = 'bg-[#85ff39]';
-
 	function handleClick() {
 		if (!hinted) return;
 		if (selected) {
@@ -32,11 +30,10 @@
 
 <Positioner {location} {size}>
 	<div
-		class="gameboard__cell transition-all duration-500 bg-gray-900 border-[0.4vmin] border-gray-800  h-full rounded-full {selected
-			? selectedClasses
-			: ''}"
+		class="gameboard__cell transition-all duration-500 h-full rounded-full border-gray-600"
 		style:border-width={selected || hinted ? '0.7vmin' : '0.4vmin'}
-		style:border-color={selected || hinted ? '#999' : 'rgb(31, 41, 55)'}
+		style:border-color={selected || hinted ? '#999' : 'rgb(55 65 81)'}
+		style:background-color={selected ? '#85ff39' : 'rgb(17 24 39'}
 		style="border-style: inset;"
 		on:click={() => handleClick()}
 	>
