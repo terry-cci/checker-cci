@@ -1,54 +1,45 @@
-import type { Marble } from '$lib/types/Marble';
+import type { Marble, MovableLocation } from '$lib/types/Marble';
 import { derived, get, writable } from 'svelte/store';
 
-import map from '$lib/data/map.json';
 import v, { type Vector } from '$lib/utils/vector';
-import { getMovableLocations } from '$lib/utils/map';
+import { getMarblesOfTeam, getMovableLocations } from '$lib/utils/map';
+import { gameflow } from './gameflow';
 
 function createMarbles() {
 	const marbles = writable<Marble[]>([]);
 	const selectedMarble = writable<Marble | undefined>(undefined);
 	const selectedCell = writable<Vector | undefined>(undefined);
 
-	const movableLocations = derived([selectedMarble, marbles], ([$selectedMarble]) => {
-		if (!$selectedMarble) return [];
-		return getMovableLocations($selectedMarble.location);
-	});
+	const movableLocations = derived(
+		[selectedMarble, marbles, gameflow.moveType],
+		([$selectedMarble]) => {
+			if (!$selectedMarble) return [];
+			return getMovableLocations($selectedMarble.location);
+		}
+	);
 
 	function init(playerCount: number) {
 		selectedMarble.set(undefined);
 		selectedCell.set(undefined);
+		gameflow.setTeams(playerCount);
+		gameflow.nextTeam();
 
-		const teamIndices = map.teamSetting[playerCount.toString() as keyof typeof map.teamSetting];
-
-		const newMarbles = teamIndices.flatMap((teamIdx) => {
-			const team = map.teams[teamIdx];
-
-			const teamMarbles = team.cells.map(([x, y], marbleIdx) => {
-				const marble: Marble = {
-					id: team.id * 100 + marbleIdx + 1,
-					team: {
-						id: team.id,
-						color: team.color
-					},
-					location: [x, y]
-				};
-
-				return marble;
-			});
-
-			return teamMarbles;
-		});
+		const newMarbles = get(gameflow.teams).flatMap(getMarblesOfTeam);
 
 		marbles.set(newMarbles);
 	}
 
-	function selectMarble(marble: Marble) {
+	function selectMarble(marble: Marble | undefined) {
+		// team not active
+		if (marble && marble.team.id !== get(gameflow.activeTeam)?.id) return;
+		// has done other moves
+		if (get(gameflow.movedMarble)) return;
+
 		selectedMarble.set(marble);
 		selectedCell.set(undefined);
 	}
 
-	function selectCell(location: Vector) {
+	function selectCell(location: Vector | undefined) {
 		selectedCell.set(location);
 	}
 
@@ -56,16 +47,21 @@ function createMarbles() {
 		return get(marbles).find((marble) => v.equals(marble.location, location));
 	}
 
-	function moveMarble(marbleId: number, to: Vector) {
+	function setMarbleLocation(marble: Marble, location: Vector) {
 		marbles.update((marbles) => {
 			const newMarbles = [...marbles];
-
-			const marble = newMarbles.find((m) => m.id === marbleId);
-			if (!marble) throw `Marble #${marbleId} not found`;
-			marble.location = to;
-
+			const m = newMarbles.find((m) => m.id === marble.id);
+			if (!m) throw `Marble #${marble.id} not found`;
+			m.location = location;
 			return newMarbles;
 		});
+	}
+
+	function moveMarble(marble: Marble, to: MovableLocation) {
+		// mark the original location
+		if (!get(gameflow.movedMarble)) gameflow.markOriginalLocation(marble, marble.location);
+		setMarbleLocation(marble, to.location);
+		gameflow.moveType.set(to.type);
 	}
 
 	return {
@@ -77,7 +73,8 @@ function createMarbles() {
 		init,
 		selectMarble,
 		marbleOnLocation,
-		moveMarble
+		moveMarble,
+		setMarbleLocation
 	};
 }
 

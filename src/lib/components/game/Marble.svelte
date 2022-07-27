@@ -7,6 +7,7 @@
 	import Positioner from './Positioner.svelte';
 	import { lightenHex } from '$lib/utils/color';
 	import { marbles } from '$lib/stores/game/marbles';
+	import BaseMarble from './BaseMarble.svelte';
 
 	export let marble: Marble;
 
@@ -20,13 +21,10 @@
 </script>
 
 <Positioner location={marble.location} {size}>
-	<div
-		class="relative gameboard__marble h-full bg-gray-500 rounded-full border-[0.6vmin] cursor-pointer hover:scale-110 transition-transform {selected
-			? selectedClasses
-			: ''}"
-		style:background-color={selected ? lightenHex(marble.team.color, 100) : marble.team.color}
-		style:border-color={selected ? '#62ff00' : lightenHex(marble.team.color, 100)}
-		style="border-style: outset;"
+	<BaseMarble
+		class="cursor-pointer hover:scale-110 transition-transform {selected ? selectedClasses : ''}"
+		{selected}
+		team={marble.team}
 		on:click={() => marbles.selectMarble(marble)}
 	/>
 </Positioner>

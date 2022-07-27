@@ -2,6 +2,9 @@ import v, { skew, type Vector } from './vector';
 import map from '$lib/data/map.json';
 
 import { marbles } from '$lib/stores/game/marbles';
+import type { Marble, MovableLocation, TeamWithCells } from '$lib/types/Marble';
+import { get } from 'svelte/store';
+import { gameflow } from '$lib/stores/game/gameflow';
 
 export const GAP = (100 * Math.cos(Math.PI / 6)) / 12;
 export const ORIGIN: Vector = [50 * (1 - Math.cos(Math.PI / 6)), 25];
@@ -32,41 +35,74 @@ export const getAllLocations = () =>
 		return column;
 	});
 
+export const getMarblesOfTeam = (team: TeamWithCells) => {
+	const teamMarbles = team.cells.map(([x, y], marbleIdx) => {
+		const marble: Marble = {
+			id: team.id * 100 + marbleIdx + 1,
+			team: {
+				id: team.id,
+				color: team.color
+			},
+			location: [x, y]
+		};
+
+		return marble;
+	});
+
+	return teamMarbles;
+};
+
+export const getFirstBlocking = (from: Vector, direction: Vector) => {
+	let currentLocation = v.add(from, direction);
+	let distance = 1;
+
+	while (isInBound(currentLocation)) {
+		if (marbles.marbleOnLocation(currentLocation)) {
+			return {
+				location: currentLocation,
+				distance
+			};
+		}
+
+		currentLocation = v.add(currentLocation, direction);
+		distance++;
+	}
+	return undefined;
+};
+
 export const getMovableLocations = (startLocation: Vector) => {
-	const movableLocations: Vector[] = [];
+	const movableLocations: MovableLocation[] = [];
 
 	// adjacent locations
-	DIRECTIONS.forEach((direction) => {
-		const newLocation = v.add(startLocation, direction);
+	if (get(gameflow.moveType) === undefined) {
+		DIRECTIONS.forEach((direction) => {
+			const newLocation = v.add(startLocation, direction);
 
-		if (!isInBound(newLocation)) return;
-		if (marbles.marbleOnLocation(newLocation)) return;
+			if (!isInBound(newLocation)) return;
+			if (marbles.marbleOnLocation(newLocation)) return;
 
-		movableLocations.push(newLocation);
-	});
+			movableLocations.push({ location: newLocation, type: 'move' });
+		});
+	}
 
 	// jumping
-	DIRECTIONS.forEach((direction) => {
-		let currentLocation = v.add(startLocation, direction);
-		let firstBlockingDistance: number | undefined;
-		let distance = 1;
+	if (get(gameflow.moveType) !== 'move') {
+		DIRECTIONS.forEach((direction) => {
+			const firstBlocking = getFirstBlocking(startLocation, direction);
+			if (!firstBlocking) return;
+			const secondBlocking = getFirstBlocking(firstBlocking.location, direction);
 
-		while (isInBound(currentLocation)) {
-			if (marbles.marbleOnLocation(currentLocation)) {
-				if (!firstBlockingDistance) {
-					firstBlockingDistance = distance;
-				} else {
-					break;
+			if (!secondBlocking || secondBlocking.distance > firstBlocking.distance) {
+				const destination = v.add(
+					firstBlocking.location,
+					v.times(direction, firstBlocking.distance)
+				);
+				if (isInBound(destination)) {
+					movableLocations.push({ location: destination, type: 'jump' });
 				}
-			} else if (firstBlockingDistance && distance === firstBlockingDistance * 2) {
-				movableLocations.push(currentLocation);
-				break;
 			}
-
-			currentLocation = v.add(currentLocation, direction);
-			distance++;
-		}
-	});
+		});
+	}
 
 	return movableLocations;
 };
