@@ -22,6 +22,7 @@ function createMarbles() {
 		selectedMarble.set(undefined);
 		selectedCell.set(undefined);
 		gameflow.setTeams(playerCount);
+
 		gameflow.nextTeam();
 
 		const newMarbles = get(gameflow.teams).flatMap(getMarblesOfTeam);
@@ -59,9 +60,18 @@ function createMarbles() {
 
 	function moveMarble(marble: Marble, to: MovableLocation) {
 		// mark the original location
+
 		if (!get(gameflow.movedMarble)) gameflow.markOriginalLocation(marble, marble.location);
+
 		setMarbleLocation(marble, to.location);
 		gameflow.moveType.set(to.type);
+
+		// not moved
+		const originalLocation = get(gameflow.originalLocation);
+		if (v.equals(to.location, originalLocation)) {
+			gameflow.resetValues();
+			selectMarble(marble);
+		}
 	}
 
 	return {

@@ -46,6 +46,7 @@ function createGameflow() {
 		const teamIndices = map.teamSetting[playerCount.toString() as keyof typeof map.teamSetting];
 		const newTeams = teamIndices.map((idx) => map.teams[idx] as TeamWithCells);
 		teams.set(newTeams);
+		activeTeamIdx.set(undefined);
 	}
 
 	return {
@@ -58,7 +59,8 @@ function createGameflow() {
 		markOriginalLocation,
 		movedMarble,
 		originalLocation,
-		undoMove
+		undoMove,
+		resetValues
 	};
 }
 
