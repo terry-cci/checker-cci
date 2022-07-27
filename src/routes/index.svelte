@@ -6,11 +6,11 @@
 
 	let playerCount: number = 2;
 
-	const { activeTeam } = gameflow;
+	const { activeTeam, movedMarble } = gameflow;
 </script>
 
 <div class="h-full flex items-center justify-center relative">
-	<div class="absolute left-0 top-0 flex flex-col bg-black shadow z-10 p-4">
+	<div class="absolute left-0 top-0 flex flex-col gap-y-2 bg-black shadow z-10 p-4">
 		<input
 			type="number"
 			placeholder="玩家人數"
@@ -20,12 +20,7 @@
 			max="6"
 		/>
 
-		<button
-			on:click={() => marbles.init(playerCount)}
-			class="bg-gray-700 py-2 px-4 mt-4 shadow rounded hover:brightness-110 transition-colors active:bg-black"
-		>
-			初始化棋盤
-		</button>
+		<button on:click={() => marbles.init(playerCount)}> 初始化棋盤 </button>
 
 		{#if $activeTeam}
 			<div class="text-center my-4">
@@ -37,19 +32,9 @@
 			</div>
 		{/if}
 
-		<button
-			on:click={() => gameflow.nextTeam()}
-			class="bg-gray-700 py-2 px-4 mt-4 shadow rounded hover:brightness-110 transition-colors active:bg-black"
-		>
-			完成走子
-		</button>
+		<button on:click={() => gameflow.nextTeam()} disabled={!$movedMarble}> 完成走子 </button>
 
-		<button
-			on:click={() => gameflow.undoMove()}
-			class="bg-gray-700 py-2 px-4 mt-4 shadow rounded hover:brightness-110 transition-colors active:bg-black"
-		>
-			取消走子
-		</button>
+		<button on:click={() => gameflow.undoMove()} disabled={!$movedMarble}> 取消走子 </button>
 	</div>
 
 	<GameBoard />
